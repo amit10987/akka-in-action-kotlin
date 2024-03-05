@@ -1,0 +1,48 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.8.0'
+    id 'application'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    akkaVersion = '2.6.20'
+    logbackVersion = '1.2.3'
+    scalaVersion = '2.13'
+    akkaManagementVersion = '1.1.4'
+    akkaProjectionVersion = '1.2.2'
+    scalikeJdbcVersion = '3.5.0'
+    akkaHttpVersion = '10.2.9'
+    akkaGrpcVersion = '2.0.0'
+    scalaTestVersion = '3.1.4'
+    jacksonVersion = '2.11.4'
+    akkaStreamAlpakkaVersion = '4.0.0'
+    akkaStreamKafkaVersion = '3.0.1'
+}
+
+dependencies {
+    implementation 'junit:junit:4.13.1'
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    implementation 'org.jetbrains.kotlin:kotlin-test'
+    implementation 'com.typesafe.akka:akka-actor-typed_2.13:2.6.20'
+    implementation 'com.typesafe.akka:akka-actor-testkit-typed_2.13:2.6.20'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+kotlin {
+    jvmToolchain(8)
+}
+
+application {
+    mainClassName = 'MainKt'
+}

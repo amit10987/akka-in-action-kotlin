@@ -1,0 +1,10 @@
+GET http://127.0.0.1:8557/cluster/members
+Accept: application/json
+
+###
+GET http://127.0.0.1:8558/cluster/members/akka://words@127.0.0.1:2551
+Accept: application/json
+
+###
+DELETE http://127.0.0.1:8558/cluster/members/akka://words@127.0.0.1:2552
+Accept: application/json

@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.0'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.typesafe.akka:akka-cluster-typed_$scalaVersion:$akkaVersion")
+    implementation("com.typesafe.akka:akka-persistence-query_$scalaVersion:$akkaVersion")
+    implementation("com.typesafe.akka:akka-stream_$scalaVersion:$akkaVersion")
+    implementation("com.lightbend.akka:akka-persistence-jdbc_$scalaVersion:5.0.0")
+    implementation("org.postgresql:postgresql:42.2.18")
+    implementation("com.lightbend.akka:akka-stream-alpakka-slick_$scalaVersion:2.0.0")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("com.typesafe.akka:akka-serialization-jackson_$scalaVersion:$akkaVersion")
+
+    // Test dependencies
+    testImplementation("com.typesafe.akka:akka-actor-testkit-typed_$scalaVersion:$akkaVersion")
+    testImplementation("com.typesafe.akka:akka-stream-testkit_$scalaVersion:$akkaVersion")
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation 'junit:junit:4.13.1'
+
+    implementation(project(":chapter09:chapter9b"))
+}
+
+test {
+    useJUnitPlatform()
+}

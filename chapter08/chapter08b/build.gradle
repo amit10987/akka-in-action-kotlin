@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.0'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    akkaVersion = '2.6.20'
+    logbackVersion = '1.2.3'
+    scalaVersion = '2.13'
+    akkaManagementVersion = '1.1.4'
+    akkaProjectionVersion = '1.2.2'
+    scalikeJdbcVersion = '3.5.0'
+    akkaHttpVersion = '10.2.9'
+    akkaGrpcVersion = '2.0.0'
+    scalaTestVersion = '3.1.4'
+    jacksonVersion = '2.11.4'
+    akkaStreamAlpakkaVersion = '4.0.0'
+    akkaStreamKafkaVersion = '3.0.1'
+}
+
+dependencies {
+    implementation platform("com.typesafe.akka:akka-bom_${scalaVersion}:${akkaVersion}")
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation 'junit:junit:4.13.1'
+    implementation 'org.jetbrains.kotlin:kotlin-test'
+    implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+
+    implementation 'com.typesafe.akka:akka-actor-typed_2.13:2.6.20'
+
+    implementation "com.typesafe.akka:akka-actor-testkit-typed_${scalaVersion}:${akkaVersion}"
+    implementation "com.typesafe.akka:akka-cluster-typed_${scalaVersion}:${akkaVersion}"
+
+    implementation "com.lightbend.akka.management:akka-management_${scalaVersion}:${akkaManagementVersion}"
+    implementation "com.lightbend.akka.management:akka-management-cluster-http_${scalaVersion}:${akkaManagementVersion}"
+    implementation "com.typesafe.akka:akka-cluster-sharding_${scalaVersion}:${akkaVersion}"
+    implementation "com.typesafe.akka:akka-discovery_${scalaVersion}:${akkaVersion}"
+
+    implementation "com.typesafe.akka:akka-serialization-jackson_${scalaVersion}"
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

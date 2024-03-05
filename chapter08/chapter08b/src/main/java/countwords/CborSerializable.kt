@@ -1,0 +1,3 @@
+package countwords
+
+interface CborSerializable
