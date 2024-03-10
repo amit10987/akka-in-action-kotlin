@@ -7,6 +7,8 @@ import akka.actor.typed.javadsl.ActorContext
 import akka.actor.typed.javadsl.Behaviors
 import akka.actor.typed.javadsl.TimerScheduler
 import akka.cluster.sharding.typed.javadsl.ClusterSharding
+import akka.cluster.sharding.typed.javadsl.EntityTypeKey
+import akka.parboiled2.Parser.Mark
 import akka.persistence.typed.PersistenceId
 import akka.persistence.typed.javadsl.CommandHandler
 import akka.persistence.typed.javadsl.Effect
@@ -15,6 +17,7 @@ import akka.persistence.typed.javadsl.EventSourcedBehavior
 import akka.persistence.typed.javadsl.ReplyEffect
 import akka.persistence.typed.javadsl.RetentionCriteria
 import java.time.Duration
+import java.util.*
 import kotlin.math.abs
 
 class Bet private constructor(
@@ -27,6 +30,18 @@ class Bet private constructor(
             Duration.ofSeconds(10), Duration.ofSeconds(60), 0.1
         )
     ) {
+
+    companion object {
+        val tags = (0 until 3).map { "bet-tag-$it" }
+
+
+        val typeKey = EntityTypeKey.create(Command::class.java, "bet")
+        fun create(betId: String): Behavior<Command> =
+            Behaviors.setup { context -> Behaviors.withTimers { timer -> Bet(betId, context, timer) } }
+
+    }
+
+
     sealed interface Command : CborSerializable {
         interface ReplyCommand : Command {
             val replyTo: ActorRef<Response>
@@ -116,10 +131,6 @@ class Bet private constructor(
         val result: Int,
     ) : CborSerializable {
         companion object {
-
-            fun create(betId: String): Behavior<Command> =
-                Behaviors.setup { context -> Behaviors.withTimers { timer -> Bet(betId, context, timer) } }
-
             fun empty(marketId: String): Status =
                 Status(marketId, "uninitialized", "uninitialized", -1.0, -1, 0)
         }
@@ -195,17 +206,21 @@ class Bet private constructor(
         val sharding = ClusterSharding.get(context.system)
         if (state.status.result == command.result) {
             val walletRef = sharding.entityRefFor(Wallet.typeKey, state.status.walletId)
-            walletRef.ask({ Wallet.Command.AddFunds(state.status.stake, it) }, Duration.ofSeconds(10))
-                .whenComplete { res, ex ->
-                    res?.let {
-                        Command.Close("stake reimbursed to wallet [$walletRef]")
 
-                    }?.let {
-                        val message = "state NOT reimbursed to wallet [$walletRef]. Reason [${ex.message}]"
-                        context.log.error(message)
-                        Command.Fail(message)
-                    }
+            context.ask(
+                Wallet.Response.UpdatedResponse::class.java,
+                walletRef,
+                Duration.ofSeconds(10),
+                { Wallet.Command.AddFunds(state.status.stake, it) }) { res, ex ->
+                res?.let {
+                    Command.Close("stake reimbursed to wallet [$walletRef]")
+
+                }?.let {
+                    val message = "state NOT reimbursed to wallet [$walletRef]. Reason [${ex.message}]"
+                    context.log.error(message)
+                    Command.Fail(message)
                 }
+            }
         }
         return Effect().none()
     }
@@ -308,7 +323,11 @@ class Bet private constructor(
     ) {
         val marketRef = sharding.entityRefFor(Market.typeKey, command.marketId)
 
-        marketRef.ask({ Market.Command.GetState(it) }, Duration.ofSeconds(3)).whenComplete { response, exception ->
+        context.ask(
+            Market.Response::class.java,
+            marketRef,
+            Duration.ofSeconds(3),
+            { Market.Command.GetState(it) }) { response, exception ->
             (response as? Market.Response.CurrentState)?.let {
                 val matched = oddsDoMatch(it.status, command)
                 Command.MarketOddsAvailable(matched.doMatch, matched.marketOdds)
@@ -391,7 +410,6 @@ class Bet private constructor(
     }
 
     override fun tagsFor(event: Bet.Event): Set<String> {
-        val tags = (0 until 3).map { i -> "bet-tag-$i" }.toSet()
         val tagIndex = abs(event.hashCode() % tags.size)
         return setOf(tags.elementAt(tagIndex))
     }
