@@ -22,6 +22,7 @@ class Market private constructor(private val marketId: String) :
     ) {
 
     companion object {
+        val tags = (0 until 3).map { i -> "market-tag-$i" }.toSet()
         val typeKey = EntityTypeKey.create(Command::class.java, "market")
         fun create(marketId: String) = Market(marketId)
     }
@@ -192,7 +193,6 @@ class Market private constructor(private val marketId: String) :
     }
 
     override fun tagsFor(event: Market.Event): Set<String> {
-        val tags = (0 until 3).map { i -> "market-tag-$i" }.toSet()
         val tagIndex = abs(event.hashCode() % tags.size)
         return setOf(tags.elementAt(tagIndex))
     }

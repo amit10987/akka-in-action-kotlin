@@ -23,6 +23,8 @@ dependencies {
     implementation "com.lightbend.akka.management:akka-management_${scalaVersion}:${akkaManagementVersion}"
     implementation "com.lightbend.akka.management:akka-management-cluster-bootstrap_${scalaVersion}:${akkaManagementVersion}"
     implementation "com.lightbend.akka.management:akka-management-cluster-http_${scalaVersion}:${akkaManagementVersion}"
+    implementation "com.typesafe.akka:akka-http2-support_${scalaVersion}:${akkaHttpVersion}"
+    implementation "com.typesafe.akka:akka-http_${scalaVersion}:${akkaHttpVersion}"
     implementation "com.lightbend.akka.discovery:akka-discovery-kubernetes-api_${scalaVersion}:${akkaManagementVersion}"
     implementation "com.lightbend.akka:akka-projection-core_${scalaVersion}:${akkaProjectionVersion}"
     implementation "com.lightbend.akka:akka-projection-eventsourced_${scalaVersion}:${akkaProjectionVersion}"
@@ -40,6 +42,8 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation 'junit:junit:4.13.1'
+    implementation 'com.typesafe.akka:akka-stream-kafka_2.13:2.1.1'
+    implementation "com.typesafe.akka:akka-http-spray-json_${scalaVersion}:${akkaHttpVersion}"
 }
 
 test {
