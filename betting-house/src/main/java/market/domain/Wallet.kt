@@ -8,6 +8,8 @@ import akka.persistence.typed.javadsl.CommandHandler
 import akka.persistence.typed.javadsl.EventHandler
 import akka.persistence.typed.javadsl.EventSourcedBehavior
 import akka.persistence.typed.javadsl.RetentionCriteria
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Duration
 import kotlin.math.abs
 
@@ -23,7 +25,10 @@ class Wallet private constructor(private val walletId: String) :
     }
 
     sealed interface Event : CborSerializable {
-        data class FundsReserved(val amount: Int) : Event
+        data class FundsReserved @JsonCreator constructor(
+            @JsonProperty("amount") val amount: Int,
+        ) : Event
+
         data class FundsAdded(val amount: Int) : Event
         data class FundsReservationDenied(val amount: Int) : Event
     }

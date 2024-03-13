@@ -19,7 +19,7 @@ object BetProjection {
     fun init(system: ActorSystem<*>, repository: BetRepository) {
         ShardedDaemonProcess.get(system).init(
             ProjectionBehavior.Command::class.java,
-            "bet-projection",
+            "BetProjection",
             Bet.tags.size,
             { index -> ProjectionBehavior.create(createProjection(system, repository, index)) },
             ShardedDaemonProcessSettings.create(system),

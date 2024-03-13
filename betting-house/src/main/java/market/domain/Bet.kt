@@ -16,6 +16,8 @@ import akka.persistence.typed.javadsl.EventHandler
 import akka.persistence.typed.javadsl.EventSourcedBehavior
 import akka.persistence.typed.javadsl.ReplyEffect
 import akka.persistence.typed.javadsl.RetentionCriteria
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Duration
 import java.util.*
 import kotlin.math.abs
@@ -106,7 +108,10 @@ class Bet private constructor(
     sealed interface Event : CborSerializable
 
     data class MarketConfirmed(val state: State.OpenState) : Event
-    data class FundsGranted(val state: State.OpenState) : Event
+    data class FundsGranted @JsonCreator constructor(
+        @JsonProperty("state") val state: State.OpenState,
+    ) : Event
+
     data class ValidationsPassed(val state: State.OpenState) : Event
     data class Opened(
         val betId: String,

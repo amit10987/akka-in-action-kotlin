@@ -39,7 +39,7 @@ class BetServiceImplSharding(private val sharding: ClusterSharding) : BetService
 
     private fun betProtoResponse(
         res: Bet.Response?,
-        ex: Throwable,
+        ex: Throwable?,
     ): BetProto.BetResponse? {
         val builder = BetProto.BetResponse.newBuilder()
         return when (res) {
@@ -47,7 +47,7 @@ class BetServiceImplSharding(private val sharding: ClusterSharding) : BetService
             is Bet.Response.RequestUnaccepted -> builder.setMessage("Action not happened because [${res.reason}]")
                 .build()
 
-            else -> builder.setMessage("Action not happened because [${ex.message}]").build()
+            else -> builder.setMessage("Action not happened because [${ex?.message}]").build()
         }
     }
 

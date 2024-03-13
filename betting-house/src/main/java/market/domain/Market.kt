@@ -22,7 +22,7 @@ class Market private constructor(private val marketId: String) :
     ) {
 
     companion object {
-        val tags = (0 until 3).map { i -> "market-tag-$i" }.toSet()
+        val tags = (0 until 3).map { i -> "market-tag-$i" }
         val typeKey = EntityTypeKey.create(Command::class.java, "market")
         fun create(marketId: String) = Market(marketId)
     }

@@ -104,7 +104,7 @@ class MarketServiceImplSharding(private val sharding: ClusterSharding) : MarketS
 
     private fun marketProtoResponse(
         res: Market.Response?,
-        ex: Throwable,
+        ex: Throwable?,
     ): MarketProto.Response? {
         val builder = MarketProto.Response.newBuilder()
         return when (res) {
@@ -112,7 +112,7 @@ class MarketServiceImplSharding(private val sharding: ClusterSharding) : MarketS
             is Market.Response.RequestUnaccepted -> builder.setMessage("Action not happened because [${res.reason}]")
                 .build()
 
-            else -> builder.setMessage("Action not happened because [${ex.message}]").build()
+            else -> builder.setMessage("Action not happened because [${ex?.message}]").build()
         }
     }
 }

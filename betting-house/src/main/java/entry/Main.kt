@@ -17,12 +17,11 @@ import server.WalletServiceServer
 
 fun main() {
     val system = ActorSystem.create(Behaviors.empty<Nothing>(), "betting-house")
-    val log = LoggerFactory.getLogger("Main")
     try {
         val sharding = ClusterSharding.get(system)
         AkkaManagement.get(system).start()
         ClusterBootstrap.get(system).start()
-        ScalikeJdbcSetup(system)
+        ScalikeJdbcSetup.init(system)
 
         BetServiceServer.init(system, sharding)
         MarketServiceServer.init(system, sharding)
@@ -33,7 +32,7 @@ fun main() {
         BetProjection.init(system, betRepository)
         MarketProjection.init(system)
     } catch (ex: Exception) {
-        log.error(
+        println(
             "Terminating Betting App. Reason [${ex.message}]"
         )
         system.terminate()

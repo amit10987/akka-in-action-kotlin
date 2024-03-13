@@ -44,6 +44,8 @@ dependencies {
     implementation 'junit:junit:4.13.1'
     implementation 'com.typesafe.akka:akka-stream-kafka_2.13:2.1.1'
     implementation "com.typesafe.akka:akka-http-spray-json_${scalaVersion}:${akkaHttpVersion}"
+    implementation 'org.slf4j:slf4j-api:1.7.5'
+    implementation 'org.slf4j:slf4j-simple:1.7.5'
 }
 
 test {

@@ -8,9 +8,9 @@ import scalikejdbc.SettingsProvider
 import java.sql.Connection
 
 class ScalikeJdbcSession : JdbcSession {
-    private val connectionPool: ConnectionPool = ConnectionPool.get("read-side-connection-pool")
-    private val connection = connectionPool.borrow()
-    val db: DB = DB.connect(connection, SettingsProvider.default())
+    //private val connectionPool: ConnectionPool = ConnectionPool.get("read-side-bet-connection-pool")
+   // private val connection = connectionPool.borrow()
+    val db: DB = DB.connect(ScalikeJdbcSetup.getConnection(), SettingsProvider.default())
 
     inline fun <R> withSession(block: (ScalikeJdbcSession) -> R): R {
         val session = ScalikeJdbcSession()
@@ -20,6 +20,7 @@ class ScalikeJdbcSession : JdbcSession {
             session.close()
         }
     }
+
     override fun rollback() {
         db.rollback()
     }

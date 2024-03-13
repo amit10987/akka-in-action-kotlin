@@ -29,8 +29,8 @@ object MarketProjection {
 
         ShardedDaemonProcess.get(system).init(
             ProjectionBehavior.Command::class.java,
-            "bet-projection",
-            Bet.tags.size,
+            "MarketProjection",
+            Market.tags.size,
             { index -> ProjectionBehavior.create(createProjection(system, topic, producer, index)) },
             ShardedDaemonProcessSettings.create(system),
             Optional.of(ProjectionBehavior.stopMessage())
@@ -62,7 +62,7 @@ object MarketProjection {
         producer: SendProducer<String, ByteArray>,
         index: Int,
     ): AtLeastOnceProjection<Offset, EventEnvelope<Market.Event>> {
-        val tag = Bet.tags[index]
+        val tag = Market.tags[index]
 
         val sourceProvider = EventSourcedProvider.eventsByTag<Market.Event>(
             system,
@@ -71,7 +71,7 @@ object MarketProjection {
         )
 
         return JdbcProjection.atLeastOnceAsync(
-            ProjectionId.of("BetProjection", tag),
+            ProjectionId.of("MarketProjection", tag),
             sourceProvider,
             { ScalikeJdbcSession() },
             { MarketProjectionHandler(system, topic, producer) },

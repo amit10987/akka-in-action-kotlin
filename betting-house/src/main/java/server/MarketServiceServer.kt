@@ -15,9 +15,9 @@ class MarketServiceServer {
             sharding: ClusterSharding,
         ): CompletionStage<ServerBinding> {
             val marketService =
-                MarketServiceHandlerFactory.createWithServerReflection(MarketServiceImplSharding(sharding), system)
+                MarketServiceHandlerFactory.create(MarketServiceImplSharding(sharding), system)
 
-            val port = system.settings().config().getInt("services.bet.port")
+            val port = system.settings().config().getInt("services.market.port")
             val host = system.settings().config().getString("services.host")
 
             return Http.get(system).newServerAt(host, port).bind(marketService)
