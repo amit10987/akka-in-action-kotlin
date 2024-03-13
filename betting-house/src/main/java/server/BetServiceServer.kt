@@ -16,7 +16,7 @@ class BetServiceServer {
         ): CompletionStage<ServerBinding> {
 
             val betService =
-                BetServiceHandlerFactory.create(BetServiceImplSharding(sharding), system)
+                BetServiceHandlerFactory.createWithServerReflection(BetServiceImplSharding(sharding), system)
 
             val port = system.settings().config().getInt("services.bet.port")
             val host = system.settings().config().getString("services.host")

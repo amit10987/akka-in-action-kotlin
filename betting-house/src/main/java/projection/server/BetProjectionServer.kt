@@ -11,7 +11,7 @@ object BetProjectionServer {
     fun init(repository: BetRepository, system: ActorSystem<*>) {
         val service =
             BetProjectionServiceHandlerFactory
-                .create(BetProjectionServiceImpl(repository), system)
+                .createWithServerReflection(BetProjectionServiceImpl(repository), system)
 
         val port = system.settings().config().getInt("services.bet-projection.port")
         val host = system.settings().config().getString("services.host")
