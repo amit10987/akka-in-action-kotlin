@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.0'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    implementation "com.typesafe.akka:akka-actor-typed_$scalaVersion:$akkaVersion"
+    implementation "com.typesafe.akka:akka-stream-typed_$scalaVersion:$akkaVersion"
+    implementation "com.lightbend.akka:akka-stream-alpakka-csv_$scalaVersion:$akkaStreamAlpakkaVersion"
+    implementation "com.lightbend.akka:akka-stream-alpakka-file_$scalaVersion:$akkaStreamAlpakkaVersion"
+    implementation "com.lightbend.akka:akka-stream-alpakka-s3_$scalaVersion:$akkaStreamAlpakkaVersion"
+    implementation "com.typesafe.akka:akka-stream_$scalaVersion:$akkaVersion"
+    implementation "com.typesafe.akka:akka-http_$scalaVersion:$akkaHttpVersion"
+    implementation "com.typesafe.akka:akka-http-xml_$scalaVersion:$akkaHttpVersion"
+    implementation "com.typesafe.akka:akka-stream-kafka_$scalaVersion:$akkaStreamKafkaVersion"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
+    testImplementation "org.scalatest:scalatest_$scalaVersion:$scalaTestVersion"
+}
+
+test {
+    useJUnitPlatform()
+}
